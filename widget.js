@@ -30,9 +30,9 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
         }, 20000);
     };
 
-    var testAxesValUpdates = function () {
+    var testaxes2ValUpdates = function () {
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: 0.005,
                 y: 10.46,
                 z: 0.304,
@@ -48,7 +48,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
             });
         }, 1000);
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: 192,
                 y: 0.028,
                 z: 0.01,
@@ -57,7 +57,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
             });
         }, 2000);
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: -3288.73,
                 y: -0,
                 z: 1.12,
@@ -67,7 +67,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
         }, 3000);
 
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: 940.5744,
                 y: null,
                 z: 1.12,
@@ -76,7 +76,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
             });
         }, 4000);
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: 0.574,
                 y: 32.424,
                 z: -3.424,
@@ -85,7 +85,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
             });
         }, 5000);
         setTimeout(function () {
-            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes", {
+            chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/axes2", {
                 x: null,
                 y: 132.424,
                 z: -3.424,
@@ -126,7 +126,7 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
     };
 
     //testPauseResume();
-    testAxesValUpdates();
+    testaxes2ValUpdates();
     //testUnitsChange();
     testCoordsChange();
 
@@ -169,20 +169,20 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         fiddleurl: "(auto fill by runme.js)", // The edit URL. This can be auto-filled by runme.js in Cloud9 if you'd like, or just define it on your own to help people know where they can edit/fork your widget
         githuburl: "(auto fill by runme.js)", // The backing github repo
         testurl: "(auto fill by runme.js)",   // The standalone working widget so can view it working by itself
-        name: "Widget / XYZ Axes v2",
-        desc: "The Axes widget shows the XYZA values of the axes of your CNC controller. It also enables you to jog, home, change units, and change Work Coordinate Systems.",
+        name: "Widget / XYZ axes2 v2",
+        desc: "The axes2 widget shows the XYZA values of the axes2 of your CNC controller. It also enables you to jog, home, change units, and change Work Coordinate Systems.",
         publish: {},
         subscribe: {},
         foreignPublish: {
             '/com-chilipeppr-widget-serialport/send': "We publish to the serial port Gcode jog commands"
         },
         foreignSubscribe: {
-            "/com-chilipeppr-interface-cnccontroller/axes": "We want X,Y,Z,A,MX,MY,MZ,MA axis updates.",
+            "/com-chilipeppr-interface-cnccontroller/axes2": "We want X,Y,Z,A,MX,MY,MZ,MA axis updates.",
                 "/com-chilipeppr-interface-cnccontroller/coords": "Track which is active: G54, G55, etc.",
                 "/com-chilipeppr-interface-cnccontroller/plannerpause": "We need to know when to pause sending jog cmds.",
                 "/com-chilipeppr-interface-cnccontroller/plannerresume": "We need to know when to resume jog cmds.",
                 "/com-chilipeppr-interface-cnccontroller/units": "Deprecated. Not listening to this anymore. See next.",
-                '/com-chilipeppr-widget-3dviewer/unitsChanged': "Listenting to see if the 3D Viewer is telling us that the user Gcode is in a specific coordinate and then just assuming we will only be sent axes coordinate updates in that unit. Not using /com-chilipeppr-interface-cnccontroller/units anymore."
+                '/com-chilipeppr-widget-3dviewer/unitsChanged': "Listenting to see if the 3D Viewer is telling us that the user Gcode is in a specific coordinate and then just assuming we will only be sent axes2 coordinate updates in that unit. Not using /com-chilipeppr-interface-cnccontroller/units anymore."
         },
         init: function () {
 
@@ -200,7 +200,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // Subscribe to the signal published from the specific controller implementing the generic interface
             // for CNC controllers that normalizes the XYZ Axis updates so we don't have to worry about
             // the specific implementation
-            chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/axes", this, this.updateAxesFromStatus);
+            chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/axes2", this, this.updateaxes2FromStatus);
 
             // Update units if we get a notification published to us
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/units", this, this.updateUnitsFromStatus);
@@ -236,8 +236,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             */
 
 
-            // setup DOM elements for the Axes in the UI
-            this.setupAxes();
+            // setup DOM elements for the axes2 in the UI
+            this.setupaxes2();
 
             // setup controller specific init items
             //this.initControllerSpecific();
@@ -315,7 +315,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 console.log("about to send gcode:", gcode);
                 chilipeppr.publish('/com-chilipeppr-widget-serialport/jsonSend', {
                     D: gcode, 
-                    Id:"axes" + this.pencilCtr++
+                    Id:"axes2" + this.pencilCtr++
                 });
                 
                 this.pencilHide(tgtEl.parents('.com-chilipeppr-xyz-pos-well'));
@@ -335,7 +335,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             tgtEl.find('.xyz-number').remove();
         },
         initAs3dPrinting: function () {
-            // by default we'll show the A/B/C axes
+            // by default we'll show the A/B/C axes2
             $('#com-chilipeppr-widget-xyz-a').removeClass("hidden");
             $('#com-chilipeppr-widget-xyz-b').removeClass("hidden");
             // change labels
@@ -1064,10 +1064,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 //console.log("d:", d);
                 if (d.sr) {
                     //console.log("it is a status report");
-                    this.updateAxesFromStatus(d.sr);
+                    this.updateaxes2FromStatus(d.sr);
                 } else if (d.r && d.r.sr) {
                     //console.log("it is a status report from a direct request");
-                    this.updateAxesFromStatus(d.r.sr);
+                    this.updateaxes2FromStatus(d.r.sr);
                 }
             }
 
@@ -1106,13 +1106,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         axisy: null,
         axisz: null,
         axisa: null,
-        axes: {},
-        //Machine coord version of axes. 
+        axes2: {},
+        //Machine coord version of axes2. 
         axismx: null,
         axismy: null,
         axismz: null,
         axisma: null,
-        setupAxes: function () {
+        setupaxes2: function () {
             this.axisx = {
                 intblack: $('#com-chilipeppr-widget-xyz-x .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-x .xyz-intgray'),
@@ -1161,7 +1161,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 negpos: $('#com-chilipeppr-widget-xyz-ma .xyz-negpos'),
                 decimal: $('#com-chilipeppr-widget-xyz-ma .xyz-decimal')
             };
-            this.axes = {
+            this.axes2 = {
                 x: this.axisx,
                 y: this.axisy,
                 z: this.axisz,
@@ -1172,36 +1172,36 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 ma: this.axisma
             };
         },
-        updateAxesFromStatus: function (axes) {
-            console.log("updateAxesFromStatus:", axes);
-            if ('x' in axes && axes.x !== null) {
-                this.updateAxis("x", axes.x);
+        updateaxes2FromStatus: function (axes2) {
+            console.log("updateaxes2FromStatus:", axes2);
+            if ('x' in axes2 && axes2.x !== null) {
+                this.updateAxis("x", axes2.x);
             }
-            if ('y' in axes && axes.y !== null) {
-                this.updateAxis("y", axes.y);
+            if ('y' in axes2 && axes2.y !== null) {
+                this.updateAxis("y", axes2.y);
             }
-            if ('z' in axes && axes.z !== null) {
-                this.updateAxis("z", axes.z);
+            if ('z' in axes2 && axes2.z !== null) {
+                this.updateAxis("z", axes2.z);
             }
-            if ('a' in axes && axes.a !== null) {
-                this.updateAxis("a", axes.a);
+            if ('a' in axes2 && axes2.a !== null) {
+                this.updateAxis("a", axes2.a);
             }
-            if ('mpo' in axes) {
-                axes = axes.mpo;
+            if ('mpo' in axes2) {
+                axes2 = axes2.mpo;
                 var scale = 0;
                 if (this.currentUnits == 'mm') scale = 1;
                 if (this.currentUnits == 'inch') scale = 1 / 25.4;
-                if ('x' in axes && axes.x !== null) {
-                    this.updateAxis("mx", this.round(axes.x * scale, 4));
+                if ('x' in axes2 && axes2.x !== null) {
+                    this.updateAxis("mx", this.round(axes2.x * scale, 4));
                 }
-                if ('y' in axes && axes.y !== null) {
-                    this.updateAxis("my", this.round(axes.y * scale, 4));
+                if ('y' in axes2 && axes2.y !== null) {
+                    this.updateAxis("my", this.round(axes2.y * scale, 4));
                 }
-                if ('z' in axes && axes.z !== null) {
-                    this.updateAxis("mz", this.round(axes.z * scale, 4));
+                if ('z' in axes2 && axes2.z !== null) {
+                    this.updateAxis("mz", this.round(axes2.z * scale, 4));
                 }
-                if ('a' in axes && axes.a !== null) {
-                    this.updateAxis("ma", this.round(axes.a * scale, 4));
+                if ('a' in axes2 && axes2.a !== null) {
+                    this.updateAxis("ma", this.round(axes2.a * scale, 4));
                 }
             }
         },
@@ -1219,7 +1219,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         updateAxis: function (axis, val) {
             console.log("updateAxis. axis:", axis, "val:", val);
-            var ax = this.axes[axis];
+            var ax = this.axes2[axis];
             var axl = this.lastVal[axis];
 
             // if this val is same as last val, return immediately
@@ -1416,8 +1416,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
         },
         homeAxis: function (evt) {
-            // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
-            // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
+            // Homes all axes2 present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
+            // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes2 that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
             var cmd = "G28.2 ";
             if (evt.data == "xyz") {
@@ -1632,7 +1632,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
             $('#com-chilipeppr-widget-xyz-ftr').focusin(function () {
                 if (that.isInCustomMenu) {
-                    console.log("got focusin for axes widget, but we appear to be showing the custom increment menu, so ignoring focus.");
+                    console.log("got focusin for axes2 widget, but we appear to be showing the custom increment menu, so ignoring focus.");
                     return;
                 }
                 //console.log("jog area focus");
@@ -1640,7 +1640,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 $('#com-chilipeppr-widget-xyz-ftr').addClass("panel-primary");
                 isjogging = true;
                 that.accelBaseValHilite({});
-                console.log("got focusin on axes widget ftr");
+                console.log("got focusin on axes2 widget ftr");
             });
             $('#com-chilipeppr-widget-xyz-ftr').focusout(function () {
 
@@ -1649,7 +1649,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 $('#com-chilipeppr-widget-xyz-ftr').removeClass("panel-primary");
                 isjogging = false;
                 that.accelBaseValHilite({});
-                console.log("got focusout on axes widget ftr");
+                console.log("got focusout on axes2 widget ftr");
             });
             /*$('#com-chilipeppr-widget-xyz-ftr').keypress(function (evt) {
                 console.log("got keypress for jog. evt:", evt, evt.which);
